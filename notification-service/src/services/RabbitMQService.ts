@@ -1,12 +1,12 @@
 import amqp, { Channel } from "amqplib";
 import config from "../config/config";
-import { FCMService } from "./FCMService";
+// import { FCMService } from "./FCMService";
 import { EmailService } from "./EmailService";
 import { UserStatusStore } from "../utils";
 
 class RabbitMQService {
   private channel!: Channel;
-  private fcmService = new FCMService();
+//   private fcmService = new FCMService();
   private emailService = new EmailService();
   private userStatusStore = new UserStatusStore();
 
@@ -31,7 +31,8 @@ class RabbitMQService {
           const isUserOnline = this.userStatusStore.isUserOnline(userId);
 
           if (isUserOnline && userToken) {
-            await this.fcmService.sendPushNotification(userToken, message);
+           // await this.fcmService.sendPushNotification(userToken, message);
+           console.log("user is online");
           } else if (userEmail) {
             await this.emailService.sendEmail(
               userEmail,

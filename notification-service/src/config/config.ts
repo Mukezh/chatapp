@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 
-const configFile = './env'
+const configFile = './.env'
 config({path: configFile})
 
 const {
@@ -17,6 +17,7 @@ const {
 } = process.env;
 
 const queue = {notifications: "NOTIFICATIONS"}
+
 
 export default {
     PORT,

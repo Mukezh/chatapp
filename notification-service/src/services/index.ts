@@ -1,4 +1,7 @@
-import { FCMService } from "./FCMService";
+// import { FCMService } from "./FCMService";
+
 import { EmailService } from "./EmailService";
 
-export { FCMService, EmailService };
+// export { FCMService, EmailService };
+
+export { EmailService }

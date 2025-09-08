@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AuthRequest } from "../middleware";
-import  {Message}  from "../database/index"
+import  {Message}  from "../database/index";
 import { ApiError, handleMessageReceived } from "../utils";
 
 

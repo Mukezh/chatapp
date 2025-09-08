@@ -32,6 +32,8 @@ class RabbitMQService {
                         callback(user);
                         this.correlationMap.delete(correlationId);
                     }
+
+                    // this.channel.ack(msg);
                 }
             },
             { noAck: true }
