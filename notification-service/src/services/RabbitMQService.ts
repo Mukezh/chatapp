@@ -18,15 +18,19 @@ class RabbitMQService {
     const connection = await amqp.connect(config.msgBrokerURL!);
     this.channel = await connection.createChannel();
     await this.consumeNotification();
+    console.log('inside init');
   }
 
   async consumeNotification() {
     await this.channel.assertQueue(config.queue.notifications);
+    
     this.channel.consume(config.queue.notifications, async (msg) => {
+      console.log('msg',msg);
       if (msg) {
+        
         const { type, userId, message, userEmail, userToken, fromName } =
           JSON.parse(msg.content.toString());
-
+        console.log('inside consumenotification');
         if (type === "MESSAGE_RECEIVED") {
           const isUserOnline = this.userStatusStore.isUserOnline(userId);
 

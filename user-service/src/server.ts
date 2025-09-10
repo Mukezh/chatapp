@@ -4,7 +4,7 @@ import userRouter from './routes/authRoutes';
 import { errorConvertor, errorHandler } from './middleware';
 import { connectDB } from './database';
 import config from './config/config';
-import { rabbitMQService } from './services/RabbitMQService';
+import { initializeRabbitMQService } from './services/RabbitMQService';
 
 const app: Express = express();
 let server: Server;
@@ -22,7 +22,7 @@ server = app.listen(config.PORT, () => {
 
 const initializeRabbitMQClient = async () => {
     try{
-        await rabbitMQService.init();
+        await initializeRabbitMQService();
         console.log("RabbitMQ client initialized and listening for messages");
     }
     catch(err) {
@@ -31,6 +31,8 @@ const initializeRabbitMQClient = async () => {
 }
 
 initializeRabbitMQClient();
+
+
 
 const exitHandler = () => {
     if(server) {

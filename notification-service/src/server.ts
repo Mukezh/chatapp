@@ -2,7 +2,8 @@ import express, { Express } from "express";
 import { Server } from "http";
 import { errorConvertor, errorHandler } from "./middleware";
 import config from "./config/config";
-import { rabbitMQService } from "./services/RabbitMQService";
+ import { rabbitMQService } from "./services/RabbitMQService";
+
 
 const app: Express = express();
 let server: Server;
@@ -23,9 +24,10 @@ const initializeRabbitMQClient = async () => {
     catch(error) {
         console.error("rabbit is not connected", error);
     }
-}
+} 
 
 initializeRabbitMQClient();
+
 
 const exitHandler = () => {
     if(server) {

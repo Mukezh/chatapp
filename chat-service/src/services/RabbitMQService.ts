@@ -1,10 +1,12 @@
 import amqp, { Channel } from 'amqplib';
 import { v4 as uuidv4 } from 'uuid';
 import config from "../config/config";
+import { UserStatusStore } from '../utils';
 
 class RabbitMQService {
     private requestQueue = "USER_DETAILS_REQUEST";
     private responseQueue = "USER_DETAILS_RESPONSE";
+    private userStatusQueue = "USER_STATUS_UPDATE";
     private correlationMap = new Map();
     private channel!: Channel;
 
@@ -18,6 +20,7 @@ class RabbitMQService {
         this.channel = await connection.createChannel();
         await this.channel.assertQueue(this.requestQueue);
         await this.channel.assertQueue(this.responseQueue);
+        await this.channel.assertQueue(this.userStatusQueue);
 
         this.channel.consume(
             this.responseQueue,
@@ -38,6 +41,25 @@ class RabbitMQService {
             },
             { noAck: true }
         )
+        this.channel.consume(
+            this.userStatusQueue,
+            (msg) => {
+                if(msg) {
+                    const { userId, isOnline} = JSON.parse(msg.content.toString());
+                    const userStatusStore = UserStatusStore.getInstance();
+                    console.log('isonline value is ', isOnline);
+                    console.log("userid for isonline is", userId);
+                    if(isOnline) {
+                        userStatusStore.setUserOnline(userId);
+                    }
+                    else {
+                        userStatusStore.setUserOffline(userId);
+                    }
+                    this.channel.ack(msg);
+                 }
+            }
+        )
+
     }
 
     async requestUserDetails(userId: string, callback: Function) {
@@ -58,20 +80,20 @@ class RabbitMQService {
     ) {
         await this.requestUserDetails(receiverId, async( user: any) => {
             const notificationPayload = {
-                type: "MESSAGE_PAYLOAD",
+                type: "MESSAGE_RECEIVED",
                 userId: receiverId,
                 userEmail: user.email,
                 message: messageContent,
                 from: senderEmail,
                 fromName: senderName
             };
-
-            try {
+           try {
                 await this.channel.assertQueue(config.queue.notifications);
                 this.channel.sendToQueue(
                     config.queue.notifications,
                     Buffer.from(JSON.stringify(notificationPayload))
                 )
+                console.log(JSON.stringify(notificationPayload));
             }
             catch (error) {
                 console.error(error);

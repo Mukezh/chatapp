@@ -20,8 +20,8 @@ export class UserStatusStore {
     setUserOffline(userId: string) {
         this.userStatuses[userId] = false;
     }
-
+    
     isUserOnline(userId: string) {
-        return !!this.userStatuses[userId];
+        return Boolean(this.userStatuses[userId]);
     }
 }

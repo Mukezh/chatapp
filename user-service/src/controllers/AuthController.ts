@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import { User, IUser } from "../database";
 import { ApiError, encryptPassword, isPasswordMatch } from "../utils";
 import config from "../config/config";
+import { rabbitMQService } from "../services/RabbitMQService";
+
 
 const jwtsecret = config.JWT_SECRET as string;
 const COOKIE_EXPIRATION_DAYS = 90;
@@ -75,6 +77,10 @@ const login = async ( req: Request, res: Response) => {
         }
 
         const token = await createSendToken(user!, res);
+        // if(token){
+             await rabbitMQService?.sendUserStatusUpdate(user.id, true);
+             //console.log(rabbitMQService?.sendUserStatusUpdate(user.id,true));
+        // }
 
         return res.json({
             status: 200,
