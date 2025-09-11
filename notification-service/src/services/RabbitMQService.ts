@@ -38,6 +38,7 @@ class RabbitMQService {
            // await this.fcmService.sendPushNotification(userToken, message);
            console.log("user is online");
           } else if (userEmail) {
+            
             await this.emailService.sendEmail(
               userEmail,
               `New message from ${fromName}`,

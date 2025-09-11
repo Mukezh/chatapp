@@ -1,0 +1,19 @@
+graph TD
+    User((User))
+    Gateway((Gateway))
+    ChatService((Chat Service))
+    UserService((User Service))
+    RabbitMQ((RabbitMQ))
+    NotificationService((Notification Service))
+    Nginx((Nginx))
+
+    User-->|API Request|Gateway
+    Gateway-->|Route: Auth|UserService
+    Gateway-->|Route: Message|ChatService
+    ChatService-->|Publish Event|RabbitMQ
+    NotificationService-->|Consume Event|RabbitMQ
+    NotificationService-->|Send Email/FCM|User
+    Nginx-->|Proxy|Gateway
+    Nginx-->|Proxy|ChatService
+    Nginx-->|Proxy|UserService
+    Nginx-->|Proxy|NotificationService

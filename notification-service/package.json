@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon src/server.ts",
     "build": "rm -rf build/ && tsc -p .",
+    "test:smtp": "node test/smtpVerify.js",
     "start": "NODE_ENV=production nodemon build/server.js"
   },
   "keywords": [],

@@ -87,6 +87,8 @@ class RabbitMQService {
                 from: senderEmail,
                 fromName: senderName
             };
+
+            console.log('notification payload is :',notificationPayload);
            try {
                 await this.channel.assertQueue(config.queue.notifications);
                 this.channel.sendToQueue(
