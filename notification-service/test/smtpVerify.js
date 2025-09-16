@@ -17,6 +17,7 @@ const {
   SMTP_USER,
   SMTP_PASS,
 } = process.env;
+  console.log(SMTP_PASS.length);
 
 async function main() {
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
