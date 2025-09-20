@@ -74,7 +74,7 @@ class RabbitMQService {
 
     async notifyReceiver(
         receiverId: string,
-        messageContent: string,
+        messageContent: string, 
         senderEmail: string,
         senderName: string,
     ) {
